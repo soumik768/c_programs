@@ -4,7 +4,7 @@
 static int n;
 int i,j,quantum_time=0;
 float a_tat=0,a_wt=0;
-int queue[];
+int queue[100000];
 int time=0,front=0,rear=0,q_count=0,m=0,s=0;
 
 typedef struct Queue
@@ -52,21 +52,13 @@ void display(Q a[])
     {
         a[i].tat=a[i].ct-a[i].at;
         a[i].wt=a[i].tat-a[i].st;
-        a[i].ntat=(float)a[i].tat/a[i].st;
     }
+
+    printf("process_name\tarival_time\tservice_time\twt\t\n");
     for(i=0;i<n;i++)
     {
-        a_tat+=a[i].tat;
-        a_wt+=a[i].wt;
+        printf("%s\t\t%d\t\t%d\t\t%d\n",a[i].process_name,a[i].at,a[i].st,a[i].wt);
     }
-    a_tat=a_tat/n;
-    a_wt=a_wt/n;
-    printf("process_name\tarival_time\tservice_time\tct\ttat\twt\tntat\n");
-    for(i=0;i<n;i++)
-    {
-        printf("%s\t%d\t%d\t%d\t%d\t%d\t%f\n",a[i].process_name,a[i].at,a[i].st,a[i].ct,a[i].tat,a[i].wt,a[i].ntat);
-    }
-    printf("a_tat=%f\na_wt=%f\n",a_tat,a_wt);
 
 }
 
