@@ -1,11 +1,10 @@
-/* this c program is to create a binary search tree. Here I have taken some comstants 
- * likes total number of elements is 100, the values of the elements are randomlly 
- * allocated to each and every nodes.
- */
-
-
 /* this c program is to create a binary tree
  * out 100 randomly generated numbers and to print it
+ */
+
+/*
+ * Name:-Soumik Roy 
+ * Roll no:- 150101074                
  */
 
 
@@ -27,10 +26,10 @@ typedef struct Binary_search_tree{
 /* This function will create temporary node before insertion it to the main 
  * binary tree..
  */
-bst *get_node(){  // in order to get input from users change the get_node() to get_node(int data) 
+bst *get_node(int x){  // in order to get input from users change the get_node() to get_node(int data) 
     bst *tmp; // where the data will be stored ...
     tmp = (bst*)malloc(sizeof(bst)); // to 
-    tmp->a = rand()%150+1;
+    tmp->a = x;
     tmp->left = NULL;
     tmp->right = NULL;
     
@@ -40,57 +39,100 @@ bst *get_node(){  // in order to get input from users change the get_node() to g
 /* this function is to insert the elements in a binary tree 
  * or to create a binary tree ...
  */
-void insert(bst *tmp, bst *root){
+bst *insert(bst *root, int x ){
     
-    /* check if the tmp node data is greater than the root data
-     * if is then send it to the right of the root else send it 
-     * to the left to the left child.
-     *----------------------------------------------------------
-     * here we have used the recursion
-     */
-    if (tmp->a <= root->a) {
-        
-        /* check there is any elements or not if yes then send the
-         * info for another recursion.............................
-         * else make the temporary node a left child.....
-         */
-      if (root->left == NULL)
-         root->left = tmp;
-      else
-         insert(root->left, tmp);
-   }
- 
-   if (tmp->a > root->a) {
-       
-       /* check there is any elements or not if yes then send the
-         * info for another recursion.............................
-         * else make the temporary node a right child.....
-         */
-      if (root->right == NULL)
-         root->right = tmp;
-      else
-         insert(root->right, tmp);
-   }
+    if(root==NULL)  root = get_node(x);
+    else
+    {
+        if(root->a > x)
+            root->left = insert(root->left,x);
+        else 
+            root->right = insert(root->right,x);
+    }
+
+    return root;
+    
 }
 
+/* this function is to print the each level elements
+ * it will consider the root as the level 1 and then it will
+ * go down recursively and print out the level elements
+ */
+void InLevel(bst* root, int level)
+{
+    if (root == NULL)
+        return;
+    if (level == 1)
+        printf("%d \t", root->a);
+    else if (level > 1)
+    {
+        InLevel(root->left, level-1);
+        InLevel(root->right, level-1);
+    }
+}
+
+/* this function is to compute the "height" of a tree.
+ * the number of nodes along the longest path from the
+ * root node down to the farthest leaf node.
+ */
+int height(bst *root)
+{
+    /* first check if the root is empty or not if so then 
+     * return 0. else get the hight using recursion
+     */
+    if (root==NULL)
+        return 0;
+    else
+    {
+        int height1 = height(root->left);
+        int height2 = height(root->right);
+ 
+        if (height1 > height2)
+            return(height1+1);
+        else return(height2+1);
+    }
+}
+
+/* this function is to initiate the printing*/
+void printInlevel(bst* root)
+{
+    int h = height(root);
+    int i;
+    printf("%d\n", h);
+    for (i=1; i<=h; i++)
+        InLevel(root, i);
+}
+ 
 
 int main(void) {
     
-    int i;
-    bst *root, *new_node;
-    root = NULL;
-    bst *get_node();
+    int n,i;
+    printf("\nEnter the number of elements in tree: ");
+    scanf("%d",&n);
+
+    int a[n];
+
+
+    //Generates random no. 
     srand(time(NULL));
-    for(i=0; i<100; i++){
-       new_node = get_node();
-       if(root == NULL){
-           root = new_node;
-       } else {
-           insert(new_node, root);
-       }
+
+    printf("The random no. generated are : ");
+    for (i = 0; i < n; ++i) 
+     {
+        a[i] = rand()%1000;
+        printf("%d \t", a[i]);
+     } printf("\n");
+
+         bst* root = NULL;
+    
+    root = insert(root,a[0]);
+
+    for(i=1;i<n;i++)
+    {
+        insert(root,a[i]);
     }
-        
-	
-	return 0;
+
+   printInlevel(root);
+   printf("\n");
 }
 
